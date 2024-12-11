@@ -44,7 +44,8 @@ void callback(char *topic, byte *payload, unsigned int length) {
  * and sets up a callback for receiving messages. Once connected, it publishes a greeting
  * message to the MQTT topic and subscribes to it for future messages.
  */
-void setup() {
+
+void setupMQTT() {
     // Set software serial baud to 115200 for debugging
     Serial.begin(115200);
 
@@ -88,6 +89,6 @@ void setup() {
  * This function continuously calls the MQTT client's loop function to ensure it can receive and process
  * any messages from the broker.
  */
-void loop() {
+void loopMGTT() {
     client.loop();  ///< Keeps the MQTT connection alive and checks for new messages
 }

@@ -1,0 +1,34 @@
+\doxysection{IMU\+\_\+\+Reading.\+h}
+\hypertarget{_i_m_u___reading_8h_source}{}\label{_i_m_u___reading_8h_source}\index{src/IMU\_Reading.h@{src/IMU\_Reading.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#include\ <Adafruit\_LSM6DSOX.h>}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{keywordtype}{void}\ imuReadingTask(\textcolor{keywordtype}{void}\ *params)\ \{}
+\DoxyCodeLine{00004\ \ \ }
+\DoxyCodeLine{00005\ \ \ \textcolor{keywordflow}{for}\ (;;)\ \{}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \ \ \ \ \textcolor{comment}{//\ Create\ sensor\ event\ objects}}
+\DoxyCodeLine{00008\ \ \ \ \ sensors\_event\_t\ accel;}
+\DoxyCodeLine{00009\ \ \ \ \ sensors\_event\_t\ gyro;}
+\DoxyCodeLine{00010\ \ \ \ \ sensors\_event\_t\ temp;}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{comment}{//\ Get\ sensor\ data}}
+\DoxyCodeLine{00013\ \ \ \ \ lsm6dsox.getEvent(\&accel,\ \&gyro,\ \&temp);}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{comment}{//\ Print\ accelerometer\ data}}
+\DoxyCodeLine{00016\ \ \ \ \ Serial.print(\textcolor{stringliteral}{"{}Accel\ X:\ "{}});\ Serial.print(accel.acceleration.x);\ Serial.print(\textcolor{stringliteral}{"{}\ m/s\string^2\(\backslash\)t"{}});}
+\DoxyCodeLine{00017\ \ \ \ \ Serial.print(\textcolor{stringliteral}{"{}Y:\ "{}});\ Serial.print(accel.acceleration.y);\ Serial.print(\textcolor{stringliteral}{"{}\ m/s\string^2\(\backslash\)t"{}});}
+\DoxyCodeLine{00018\ \ \ \ \ Serial.print(\textcolor{stringliteral}{"{}Z:\ "{}});\ Serial.print(accel.acceleration.z);\ Serial.println(\textcolor{stringliteral}{"{}\ m/s\string^2"{}});}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{comment}{//\ Print\ gyroscope\ data}}
+\DoxyCodeLine{00021\ \ \ \ \ Serial.print(\textcolor{stringliteral}{"{}Gyro\ X:\ "{}});\ Serial.print(gyro.gyro.x);\ Serial.print(\textcolor{stringliteral}{"{}\ rad/s\(\backslash\)t"{}});}
+\DoxyCodeLine{00022\ \ \ \ \ Serial.print(\textcolor{stringliteral}{"{}Y:\ "{}});\ Serial.print(gyro.gyro.y);\ Serial.print(\textcolor{stringliteral}{"{}\ rad/s\(\backslash\)t"{}});}
+\DoxyCodeLine{00023\ \ \ \ \ Serial.print(\textcolor{stringliteral}{"{}Z:\ "{}});\ Serial.print(gyro.gyro.z);\ Serial.println(\textcolor{stringliteral}{"{}\ rad/s"{}});}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{comment}{//\ Print\ temperature\ data}}
+\DoxyCodeLine{00026\ \ \ \ \ Serial.print(\textcolor{stringliteral}{"{}Temp:\ "{}});\ Serial.print(temp.temperature);\ Serial.println(\textcolor{stringliteral}{"{}\ C"{}});}
+\DoxyCodeLine{00027\ \ \ \}}
+\DoxyCodeLine{00028\ \}}
+
+\end{DoxyCode}

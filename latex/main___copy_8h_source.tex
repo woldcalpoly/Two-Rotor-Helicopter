@@ -1,0 +1,380 @@
+\doxysection{main\+\_\+\+Copy.\+h}
+\hypertarget{main___copy_8h_source}{}\label{main___copy_8h_source}\index{src/main\_Copy.h@{src/main\_Copy.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#include\ <taskshare.h>}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <Arduino.h>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <Wire.h>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <Servo.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <Encoder.h>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <Adafruit\_LSM6DSOX.h>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <Pitch\_Control.h>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <Yaw\_Control.h>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <Roll\_Control.h>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <Altitude\_Control.h>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <Combiner\_Function.h>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <esp\_system.h>}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ Adafruit\_LSM6DSOX\ lsm6dsox;}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{comment}{//\ Define\ pins\ for\ the\ system}}
+\DoxyCodeLine{00018\ \ \ \textcolor{comment}{//\ Servo\ encoders\ (5\ pins)}}
+\DoxyCodeLine{00019\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ encoderPinPower\ =\ 17;\ \textcolor{comment}{//\ 3v3\ Connection}}
+\DoxyCodeLine{00020\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ encoderPin1A\ =\ 2;\ \textcolor{comment}{//\ Encoder\ 1\ -\/\ Channel\ A}}
+\DoxyCodeLine{00021\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ encoderPin1B\ =\ 5;\ \textcolor{comment}{//\ Encoder\ 1\ -\/\ Channel\ B}}
+\DoxyCodeLine{00022\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ encoderPin2A\ =\ 13;\ \textcolor{comment}{//\ Encoder\ 2\ -\/\ Channel\ A}}
+\DoxyCodeLine{00023\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ encoderPin2B\ =\ 27;\ \textcolor{comment}{//\ Encoder\ 2\ -\/\ Channel\ B}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \textcolor{comment}{//\ Servo\ limit\ switches\ (2\ pins)}}
+\DoxyCodeLine{00026\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ limitSwitch1\ =\ 25;}
+\DoxyCodeLine{00027\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ limitSwitch2\ =\ 26;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \textcolor{comment}{//\ Motor\ ESCs\ (2\ pins)}}
+\DoxyCodeLine{00030\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ escPin1\ =\ 13;\ \textcolor{comment}{//\ ESC\ 1}}
+\DoxyCodeLine{00031\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ escPin2\ =\ 12;\ \textcolor{comment}{//\ ESC\ 2}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \ \ \textcolor{comment}{//\ Motor\ driver\ pins\ (2\ pins)}}
+\DoxyCodeLine{00035\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ motorDriverPin1\ =\ 19;\ \textcolor{comment}{//\ Motor\ driver\ 1\ control}}
+\DoxyCodeLine{00036\ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ motorDriverPin2\ =\ 18;\ \textcolor{comment}{//\ Motor\ driver\ 2\ control}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{comment}{//\ Initialize\ servo\ objects}}
+\DoxyCodeLine{00040\ Servo\ servo1;\ \textcolor{comment}{//\ Driver\ chip\ 1\ for\ servo\ motor\ 1}}
+\DoxyCodeLine{00041\ Servo\ servo2;\ \textcolor{comment}{//\ Driver\ chip\ 2\ for\ servo\ motor\ 2}}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{comment}{//\ Initialize\ encoder\ objects}}
+\DoxyCodeLine{00044\ Encoder\ encoder1(encoderPin1A,\ encoderPin1B);}
+\DoxyCodeLine{00045\ Encoder\ encoder2(encoderPin2A,\ encoderPin2B);}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \textcolor{keywordtype}{long}\ lastPosition1\ =\ 0.0;}
+\DoxyCodeLine{00049\ \textcolor{keywordtype}{long}\ lastPosition2\ =\ 0.0;}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \textcolor{keywordtype}{float}\ motor1Power\ =\ 0.0;\ \textcolor{comment}{//\ Initialize\ motor\ 1\ power}}
+\DoxyCodeLine{00053\ \textcolor{keywordtype}{float}\ motor2Power\ =\ 0.0;\ \textcolor{comment}{//\ Initialize\ motor\ 2\ power}}
+\DoxyCodeLine{00054\ \textcolor{keywordtype}{float}\ servo1Power\ =\ 0.0;\ }
+\DoxyCodeLine{00055\ \textcolor{keywordtype}{float}\ servo2Power\ =\ 0.0;\ }
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{keywordtype}{float}\ motor1Correction\ =\ 0.0;\ \textcolor{comment}{//\ Initialize\ motor\ 1\ correction}}
+\DoxyCodeLine{00058\ \textcolor{keywordtype}{float}\ motor2Correction\ =\ 0.0;\ \textcolor{comment}{//\ Initialize\ motor\ 2\ correction}}
+\DoxyCodeLine{00059\ \textcolor{keywordtype}{float}\ servo1Correction\ =\ 0.0;\ }
+\DoxyCodeLine{00060\ \textcolor{keywordtype}{float}\ servo2Correction\ =\ 0.0;\ }
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{keywordtype}{float}\ pitchMotor1Correction\ =\ 0.0;\ \textcolor{comment}{//\ Initialize\ motor\ 1\ correction}}
+\DoxyCodeLine{00063\ \textcolor{keywordtype}{float}\ pitchMotor2Correction\ =\ 0.0;\ \textcolor{comment}{//\ Initialize\ motor\ 2\ correction}}
+\DoxyCodeLine{00064\ \textcolor{keywordtype}{float}\ yawMotor1Correction\ =\ 0.0;}
+\DoxyCodeLine{00065\ \textcolor{keywordtype}{float}\ yawMotor2Correction\ =\ 0.0;}
+\DoxyCodeLine{00066\ \textcolor{keywordtype}{float}\ yawServo1Correction\ =\ 0.0;\ \ }
+\DoxyCodeLine{00067\ \textcolor{keywordtype}{float}\ yawServo2Correction\ =\ 0.0;}
+\DoxyCodeLine{00068\ \textcolor{keywordtype}{float}\ rollMotor1Correction\ =\ 0.0;}
+\DoxyCodeLine{00069\ \textcolor{keywordtype}{float}\ rollMotor2Correction\ =\ 0.0;}
+\DoxyCodeLine{00070\ \textcolor{keywordtype}{float}\ rollServo1Correction\ =\ 0.0;}
+\DoxyCodeLine{00071\ \textcolor{keywordtype}{float}\ rollServo2Correction\ =\ 0.0;}
+\DoxyCodeLine{00072\ \textcolor{keywordtype}{float}\ altitudeMotor1Correction\ =\ 0.0;}
+\DoxyCodeLine{00073\ \textcolor{keywordtype}{float}\ altitudeMotor2Correction\ =\ 0.0;}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \textcolor{keywordtype}{float}\ maxTemperature\ =\ 80;\ \textcolor{comment}{//\ Max\ IMU\ temp\ is\ 80\ degrees\ Celsius}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \textcolor{keywordtype}{float}\ maxServoPosition1\ =\ 0.0;}
+\DoxyCodeLine{00078\ \textcolor{keywordtype}{float}\ maxServoPosition2\ =\ 0.0;}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ startTime\ =\ 0.0;}
+\DoxyCodeLine{00081\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ idleStartTime\ =\ 0.0;}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \textcolor{keyword}{enum}\ State\ \{}
+\DoxyCodeLine{00084\ \ \ IDLE,}
+\DoxyCodeLine{00085\ \ \ RUNNING,}
+\DoxyCodeLine{00086\ \ \ EMERGENCY,}
+\DoxyCodeLine{00087\ \ \ RESET}
+\DoxyCodeLine{00088\ \};}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \textcolor{comment}{//\ Current\ state\ of\ the\ system}}
+\DoxyCodeLine{00091\ State\ currentState\ =\ IDLE;}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \textcolor{keywordtype}{void}\ setup()\ \{}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ Serial.begin(115200);}
+\DoxyCodeLine{00099\ \ \ \textcolor{keywordflow}{while}\ (!Serial)\ delay(10);}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ Serial.println(\textcolor{stringliteral}{"{}LSM6DSOX\ IMU\ Test"{}});}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{comment}{//\ Try\ to\ initialize\ the\ LSM6DSOX}}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordflow}{if}\ (!lsm6dsox.begin\_I2C())\ \{\ \ \textcolor{comment}{//\ Use\ I2C\ interface}}
+\DoxyCodeLine{00105\ \ \ \ \ }
+\DoxyCodeLine{00106\ \ \ \ \ \ \ Serial.println(\textcolor{stringliteral}{"{}Failed\ to\ find\ LSM6DSOX\ chip"{}});}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (1)\ \{}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ }
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ delay(10);}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00111\ \ \ \ \ \}}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ Serial.println(\textcolor{stringliteral}{"{}LSM6DSOX\ Found!"{}});}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \textcolor{comment}{//\ Set\ up\ sensor\ ranges\ and\ output\ rates\ (optional)}}
+\DoxyCodeLine{00116\ \ \ lsm6dsox.setAccelRange(LSM6DS\_ACCEL\_RANGE\_2\_G);}
+\DoxyCodeLine{00117\ \ \ lsm6dsox.setGyroRange(LSM6DS\_GYRO\_RANGE\_250\_DPS);}
+\DoxyCodeLine{00118\ \ \ lsm6dsox.setAccelDataRate(LSM6DS\_RATE\_104\_HZ);}
+\DoxyCodeLine{00119\ \ \ lsm6dsox.setGyroDataRate(LSM6DS\_RATE\_104\_HZ);}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ Serial.println(\textcolor{stringliteral}{"{}Sensor\ configured!"{}});}
+\DoxyCodeLine{00122\ \ \ }
+\DoxyCodeLine{00123\ \ \ \textcolor{comment}{//\ Initialize\ motor\ ESCs\ as\ PWM\ outputs}}
+\DoxyCodeLine{00124\ \ \ pinMode(escPin1,\ OUTPUT);}
+\DoxyCodeLine{00125\ \ \ pinMode(escPin2,\ OUTPUT);}
+\DoxyCodeLine{00126\ \ \ }
+\DoxyCodeLine{00127\ \ \ ledcAttachPin(escPin2,\ 1);}
+\DoxyCodeLine{00128\ \ \ ledcSetup(1,\ 1000,\ 8);}
+\DoxyCodeLine{00129\ \ \ ledcAttachPin(escPin1,\ 0);}
+\DoxyCodeLine{00130\ \ \ ledcSetup(0,\ 1000,\ 8);}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \textcolor{comment}{//\ Initialize\ motor\ driver\ pins}}
+\DoxyCodeLine{00133\ \ \ pinMode(motorDriverPin1,\ OUTPUT);}
+\DoxyCodeLine{00134\ \ \ pinMode(motorDriverPin2,\ OUTPUT);}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \textcolor{comment}{//\ Attach\ servos\ to\ their\ pins}}
+\DoxyCodeLine{00138\ \ \ servo1.attach(motorDriverPin1);\ \textcolor{comment}{//\ Example\ pin\ for\ Servo\ 1}}
+\DoxyCodeLine{00139\ \ \ servo2.attach(motorDriverPin2);\ \textcolor{comment}{//\ Example\ pin\ for\ Servo\ 2}}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \ \ \textcolor{comment}{//\ Set\ up\ limit\ switches\ as\ inputs}}
+\DoxyCodeLine{00143\ \ \ pinMode(limitSwitch1,\ INPUT\_PULLUP);}
+\DoxyCodeLine{00144\ \ \ pinMode(limitSwitch2,\ INPUT\_PULLUP);}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \textcolor{comment}{//\ Tuning\ servo\ motors\ to\ find\ full\ range\ of\ motion}}
+\DoxyCodeLine{00147\ \ \ \textcolor{keywordtype}{int}\ position\ =\ 0;}
+\DoxyCodeLine{00148\ \ \ servo1.write(0);}
+\DoxyCodeLine{00149\ \ \ servo2.write(0);}
+\DoxyCodeLine{00150\ \ \ delay(500);}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \textcolor{keywordflow}{while}\ (digitalRead(limitSwitch1)\ ==\ HIGH)\ \{}
+\DoxyCodeLine{00153\ \ \ \ \ position\ +=\ 20;}
+\DoxyCodeLine{00154\ \ \ \ \ servo1.write(map(position,\ 0,\ 1000,\ 0,\ 180));}
+\DoxyCodeLine{00155\ \ \ \ \ delay(15);}
+\DoxyCodeLine{00156\ \ \ \}}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \ \ maxServoPosition1\ =\ position;}
+\DoxyCodeLine{00159\ \ \ position\ =\ 0;}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \ \ \textcolor{keywordflow}{while}\ (digitalRead(limitSwitch2)\ ==\ HIGH)\ \{}
+\DoxyCodeLine{00162\ \ \ \ \ position\ +=\ 20;}
+\DoxyCodeLine{00163\ \ \ \ \ servo2.write(map(position,\ 0,\ 1000,\ 0,\ 180));}
+\DoxyCodeLine{00164\ \ \ \ \ delay(15);}
+\DoxyCodeLine{00165\ \ \ \}}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \ \ maxServoPosition1\ =\ position;}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \}}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \textcolor{keywordtype}{void}\ loop()\ \{}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \ \ \textcolor{comment}{//\ Check\ the\ state\ of\ the\ system\ and\ act\ accordingly}}
+\DoxyCodeLine{00181\ \ \ \textcolor{keywordflow}{switch}\ (currentState)\ \{}
+\DoxyCodeLine{00182\ \ \ \ \ \textcolor{keywordflow}{case}\ IDLE:}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ idleState();}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{keywordflow}{case}\ RUNNING:}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ runningState();}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00188\ \ \ \ \ \textcolor{keywordflow}{case}\ EMERGENCY:}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ emergencyState();}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{keywordflow}{case}\ RESET:}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ resetState();}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00194\ \ \ \}}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \ \ delay(10);}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ \}}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ }
+\DoxyCodeLine{00201\ \textcolor{keywordtype}{void}\ limitSwitchCheck()\ \{}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00203\ \ \ \textcolor{keywordflow}{if}\ (digitalRead(limitSwitch1)\ ==\ LOW\ \&\&\ digitalRead(limitSwitch2)\ ==\ LOW)\ \{}
+\DoxyCodeLine{00204\ \ \ \ \ \textcolor{keywordflow}{if}\ (startTime\ ==\ 0)\ \{}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ startTime\ =\ millis();\ \ \textcolor{comment}{//\ Record\ the\ current\ time}}
+\DoxyCodeLine{00206\ \ \ \ \ \}}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \ \ \ \ \textcolor{comment}{//\ Check\ if\ 5\ seconds\ have\ passed\ since\ the\ start\ time}}
+\DoxyCodeLine{00209\ \ \ \ \ \textcolor{keywordflow}{if}\ (millis()\ -\/\ startTime\ >=\ 5000)\ \{}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ currentState\ =\ RESET;}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ Serial.println(\textcolor{stringliteral}{"{}Transitioning\ to\ Reset\ State"{}});}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ startTime\ =\ 0;\ \ \textcolor{comment}{//\ Reset\ start\ time\ to\ avoid\ repeated\ prints}}
+\DoxyCodeLine{00213\ \ \ \ \ \}}
+\DoxyCodeLine{00214\ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00215\ \ \ \ \ \textcolor{comment}{//\ Reset\ the\ start\ time\ if\ either\ switch\ is\ released}}
+\DoxyCodeLine{00216\ \ \ \ \ startTime\ =\ 0;}
+\DoxyCodeLine{00217\ \ \ \}}
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00219\ \}}
+\DoxyCodeLine{00220\ \ \ }
+\DoxyCodeLine{00221\ \textcolor{keywordtype}{void}\ temperatureCheck(\textcolor{keywordtype}{float}\ currentTemperature)\ \{}
+\DoxyCodeLine{00222\ \ \ \textcolor{keywordflow}{if}(\ currentTemperature\ >\ maxTemperature)\ \{}
+\DoxyCodeLine{00223\ \ \ \ \ currentState\ =\ EMERGENCY;}
+\DoxyCodeLine{00224\ \ \ \ \ Serial.println(\textcolor{stringliteral}{"{}Transitioning\ to\ EMERGENCY\ STATE"{}});}
+\DoxyCodeLine{00225\ \ \ \}}
+\DoxyCodeLine{00226\ \}}
+\DoxyCodeLine{00227\ }
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ }
+\DoxyCodeLine{00231\ \textcolor{keywordtype}{void}\ runningState\ ()\ \{}
+\DoxyCodeLine{00232\ }
+\DoxyCodeLine{00233\ \ \ \textcolor{comment}{//\ Create\ sensor\ event\ objects}}
+\DoxyCodeLine{00234\ \ \ sensors\_event\_t\ accel;}
+\DoxyCodeLine{00235\ \ \ sensors\_event\_t\ gyro;}
+\DoxyCodeLine{00236\ \ \ sensors\_event\_t\ temp;}
+\DoxyCodeLine{00237\ }
+\DoxyCodeLine{00238\ \ \ \textcolor{comment}{//\ Get\ sensor\ data}}
+\DoxyCodeLine{00239\ \ \ lsm6dsox.getEvent(\&accel,\ \&gyro,\ \&temp);}
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00241\ \ \ \textcolor{comment}{//\ Print\ accelerometer\ data}}
+\DoxyCodeLine{00242\ \ \ Serial.print(\textcolor{stringliteral}{"{}Accel\ X:\ "{}});\ Serial.print(accel.acceleration.x);\ Serial.print(\textcolor{stringliteral}{"{}\ m/s\string^2\(\backslash\)t"{}});}
+\DoxyCodeLine{00243\ \ \ Serial.print(\textcolor{stringliteral}{"{}Y:\ "{}});\ Serial.print(accel.acceleration.y);\ Serial.print(\textcolor{stringliteral}{"{}\ m/s\string^2\(\backslash\)t"{}});}
+\DoxyCodeLine{00244\ \ \ Serial.print(\textcolor{stringliteral}{"{}Z:\ "{}});\ Serial.print(accel.acceleration.z);\ Serial.println(\textcolor{stringliteral}{"{}\ m/s\string^2"{}});}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ \ \ \textcolor{comment}{//\ Print\ gyroscope\ data}}
+\DoxyCodeLine{00247\ \ \ Serial.print(\textcolor{stringliteral}{"{}Gyro\ X:\ "{}});\ Serial.print(gyro.gyro.x);\ Serial.print(\textcolor{stringliteral}{"{}\ rad/s\(\backslash\)t"{}});}
+\DoxyCodeLine{00248\ \ \ Serial.print(\textcolor{stringliteral}{"{}Y:\ "{}});\ Serial.print(gyro.gyro.y);\ Serial.print(\textcolor{stringliteral}{"{}\ rad/s\(\backslash\)t"{}});}
+\DoxyCodeLine{00249\ \ \ Serial.print(\textcolor{stringliteral}{"{}Z:\ "{}});\ Serial.print(gyro.gyro.z);\ Serial.println(\textcolor{stringliteral}{"{}\ rad/s"{}});}
+\DoxyCodeLine{00250\ }
+\DoxyCodeLine{00251\ \ \ \textcolor{comment}{//\ Print\ temperature\ data}}
+\DoxyCodeLine{00252\ \ \ Serial.print(\textcolor{stringliteral}{"{}Temp:\ "{}});\ Serial.print(temp.temperature);\ Serial.println(\textcolor{stringliteral}{"{}\ C"{}});}
+\DoxyCodeLine{00253\ }
+\DoxyCodeLine{00254\ \ \ \textcolor{keywordtype}{long}\ currentPosition1\ =\ encoder1.read();\ \ \textcolor{comment}{//\ Read\ the\ encoder's\ position}}
+\DoxyCodeLine{00255\ \ \ \textcolor{keywordtype}{long}\ currentPosition2\ =\ encoder2.read();}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ \ \ pitchControl(accel.acceleration.x,\ gyro.gyro.y,\ pitchMotor1Correction,\ pitchMotor2Correction);}
+\DoxyCodeLine{00258\ \ \ yawControl(gyro.gyro.z,\ yawMotor1Correction,\ yawMotor2Correction,\ yawServo1Correction,\ yawServo2Correction);}
+\DoxyCodeLine{00259\ \ \ rollControl(accel.acceleration.y,\ gyro.gyro.x,\ rollMotor1Correction,\ rollMotor2Correction,\ rollServo1Correction,\ rollServo2Correction);}
+\DoxyCodeLine{00260\ \ \ altitudeControl(accel.acceleration.z,\ altitudeMotor1Correction,\ altitudeMotor2Correction);}
+\DoxyCodeLine{00261\ }
+\DoxyCodeLine{00262\ \ \ combinerFunction(pitchMotor1Correction,\ pitchMotor2Correction,}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ yawMotor1Correction,\ yawMotor2Correction,}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ yawServo1Correction,\ yawServo2Correction,\ }
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rollMotor1Correction,\ rollMotor2Correction,}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rollServo1Correction,\ rollServo2Correction,}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ altitudeMotor1Correction,\ altitudeMotor2Correction,}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ currentPosition1,\ currentPosition2,}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ motor1Correction,\ motor2Correction,\ }
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ servo1Correction,\ servo2Correction);}
+\DoxyCodeLine{00271\ }
+\DoxyCodeLine{00272\ Serial.print(\textcolor{stringliteral}{"{}Motor\ 1\ Total\ Correction:\ "{}});\ Serial.print(motor1Correction);}
+\DoxyCodeLine{00273\ Serial.print(\textcolor{stringliteral}{"{}Motor\ 2\ Total\ Correction:\ "{}});\ Serial.print(motor2Correction);}
+\DoxyCodeLine{00274\ Serial.print(\textcolor{stringliteral}{"{}Servo\ 1\ Total\ Correction:\ "{}});\ Serial.print(servo1Correction);}
+\DoxyCodeLine{00275\ Serial.print(\textcolor{stringliteral}{"{}Servo\ 2\ Total\ Correction:\ "{}});\ Serial.print(servo2Correction);}
+\DoxyCodeLine{00276\ }
+\DoxyCodeLine{00277\ }
+\DoxyCodeLine{00278\ \textcolor{comment}{//\ ENCODER\ PWM\ MODIFICATION\ \ \ }}
+\DoxyCodeLine{00279\ }
+\DoxyCodeLine{00280\ \ \ \textcolor{comment}{//\ If\ the\ position\ changes,\ print\ the\ new\ position\ to\ the\ Serial\ Monitor}}
+\DoxyCodeLine{00281\ \ \ \textcolor{keywordflow}{if}\ (currentPosition1\ !=\ lastPosition1)\ \{}
+\DoxyCodeLine{00282\ \ \ \ \ Serial.print(\textcolor{stringliteral}{"{}Encoder\ Position:\ "{}});}
+\DoxyCodeLine{00283\ \ \ \ \ Serial.println(currentPosition1);}
+\DoxyCodeLine{00284\ \ \ \ \ lastPosition1\ =\ currentPosition1;}
+\DoxyCodeLine{00285\ \ \ \}}
+\DoxyCodeLine{00286\ }
+\DoxyCodeLine{00287\ \ \ \textcolor{keywordflow}{if}\ (currentPosition1\ !=\ servo1Correction)\ \{}
+\DoxyCodeLine{00288\ \ \ \ \ \textcolor{comment}{//\ Map\ the\ corrected\ position\ to\ a\ servo\ angle}}
+\DoxyCodeLine{00289\ \ \ \ \ \textcolor{keywordflow}{if}\ (servo1Correction\ >\ maxServoPosition1)\{\ servo1Correction\ =\ maxServoPosition1;\ \}}
+\DoxyCodeLine{00290\ \ \ \ \ \textcolor{keywordtype}{int}\ targetServoAngle1\ =\ map(servo1Correction,\ 0,\ 1000,\ 0,\ 180);}
+\DoxyCodeLine{00291\ \ \ \ \ servo1.write(targetServoAngle1);\ \ \textcolor{comment}{//\ Move\ the\ servo\ to\ the\ corrected\ position}}
+\DoxyCodeLine{00292\ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00293\ \ \ \ \ Serial.println(\textcolor{stringliteral}{"{}Servo\ 2\ is\ already\ at\ the\ corrected\ position."{}});}
+\DoxyCodeLine{00294\ \ \ \}}
+\DoxyCodeLine{00295\ }
+\DoxyCodeLine{00296\ }
+\DoxyCodeLine{00297\ \ \ \textcolor{keywordflow}{if}\ (currentPosition2\ !=\ servo2Correction)\ \{}
+\DoxyCodeLine{00298\ \ \ \ \ \textcolor{comment}{//\ Map\ the\ corrected\ position\ to\ a\ servo\ angle}}
+\DoxyCodeLine{00299\ \ \ \ \ \textcolor{keywordflow}{if}\ (servo2Correction\ >\ maxServoPosition2)\{\ servo2Correction\ =\ maxServoPosition2;\ \}}
+\DoxyCodeLine{00300\ \ \ \ \ \textcolor{keywordtype}{int}\ targetServoAngle2\ =\ map(servo2Correction,\ 0,\ 1000,\ 0,\ 180);}
+\DoxyCodeLine{00301\ \ \ \ \ servo2.write(targetServoAngle2);\ \ \textcolor{comment}{//\ Move\ the\ servo\ to\ the\ corrected\ position}}
+\DoxyCodeLine{00302\ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00303\ \ \ \ \ Serial.println(\textcolor{stringliteral}{"{}Servo\ 2\ is\ already\ at\ the\ corrected\ position."{}});}
+\DoxyCodeLine{00304\ \ \ \}}
+\DoxyCodeLine{00305\ }
+\DoxyCodeLine{00306\ }
+\DoxyCodeLine{00307\ \textcolor{comment}{//\ THRUST\ MOTOR\ PWM\ MODIFICATION}}
+\DoxyCodeLine{00308\ \ \ \textcolor{comment}{//\ analogWrite(escPin1,\ map(motor1Correction,\ 1000,\ 2000,\ 0,\ 255));\ //\ Takes\ motor1Correction\ range\ of\ 1000-\/2000\ to\ esp32\ PWM\ resolution\ 0-\/255\ for\ analogWrite}}
+\DoxyCodeLine{00309\ \ \ \textcolor{comment}{//\ analogWrite(escPin2,\ map(motor2Correction,\ 1000,\ 2000,\ 0,\ 255));}}
+\DoxyCodeLine{00310\ \ \ }
+\DoxyCodeLine{00311\ \ \ ledcWrite(0,\ map(motor1Correction,\ 1000,\ 2000,\ 0,\ 225));}
+\DoxyCodeLine{00312\ \ \ ledcWrite(0,\ map(motor2Correction,\ 1000,\ 2000,\ 0,\ 225));}
+\DoxyCodeLine{00313\ }
+\DoxyCodeLine{00314\ }
+\DoxyCodeLine{00315\ }
+\DoxyCodeLine{00316\ \ \ limitSwitchCheck();}
+\DoxyCodeLine{00317\ }
+\DoxyCodeLine{00318\ \ \ temperatureCheck(temp.temperature);}
+\DoxyCodeLine{00319\ }
+\DoxyCodeLine{00320\ \ \ delay(10);}
+\DoxyCodeLine{00321\ \}}
+\DoxyCodeLine{00322\ }
+\DoxyCodeLine{00323\ }
+\DoxyCodeLine{00324\ \textcolor{keywordtype}{void}\ idleState\ ()\ \{}
+\DoxyCodeLine{00325\ }
+\DoxyCodeLine{00326\ \ \ Serial.println(\textcolor{stringliteral}{"{}System\ is\ in\ IDLE"{}});}
+\DoxyCodeLine{00327\ \ \ \textcolor{comment}{//\ No\ power\ to\ ESC\ or\ DRIVER\ CHIPS}}
+\DoxyCodeLine{00328\ \ \ servo1.write(map(500,\ 0,\ 1000,\ 0,\ 180));}
+\DoxyCodeLine{00329\ \ \ servo1.write(map(500,\ 0,\ 1000,\ 0,\ 180));}
+\DoxyCodeLine{00330\ \ \ analogWrite(escPin1,\ map(1500,\ 1000,\ 2000,\ 0,\ 255));}
+\DoxyCodeLine{00331\ \ \ analogWrite(escPin2,\ map(1500,\ 1000,\ 2000,\ 0,\ 255));}
+\DoxyCodeLine{00332\ }
+\DoxyCodeLine{00333\ \ \ \textcolor{keywordtype}{int}\ idleTime\ =\ 20000;}
+\DoxyCodeLine{00334\ }
+\DoxyCodeLine{00335\ \ \ \ \textcolor{keywordflow}{if}\ (idleStartTime\ ==\ 0)\ \{}
+\DoxyCodeLine{00336\ \ \ \ \ idleStartTime\ =\ millis();}
+\DoxyCodeLine{00337\ \ \ \}}
+\DoxyCodeLine{00338\ }
+\DoxyCodeLine{00339\ \ \ \textcolor{keywordflow}{if}\ (millis()\ -\/\ idleStartTime\ >=\ idleTime)\ \{}
+\DoxyCodeLine{00340\ \ \ \ \ Serial.println(\textcolor{stringliteral}{"{}20\ seconds\ elapsed\ in\ IDLE.\ Switching\ to\ RUNNING."{}});}
+\DoxyCodeLine{00341\ \ \ \ \ currentState\ =\ RUNNING;}
+\DoxyCodeLine{00342\ \ \ \ \ idleStartTime\ =\ 0;}
+\DoxyCodeLine{00343\ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00344\ \ \ \}}
+\DoxyCodeLine{00345\ \}}
+\DoxyCodeLine{00346\ }
+\DoxyCodeLine{00347\ \textcolor{keywordtype}{void}\ emergencyState\ ()\ \{}
+\DoxyCodeLine{00348\ }
+\DoxyCodeLine{00349\ \ \ Serial.println(\textcolor{stringliteral}{"{}System\ is\ in\ EMERGENCY"{}});}
+\DoxyCodeLine{00350\ \ \ \textcolor{comment}{//\ Motor\ power\ to\ zero}}
+\DoxyCodeLine{00351\ \ \ \textcolor{comment}{//\ Cut\ power\ from\ battery}}
+\DoxyCodeLine{00352\ \ \ \textcolor{comment}{//\ No\ Signals\ to\ any\ connections}}
+\DoxyCodeLine{00353\ \ \ servo1.write(map(500,\ 0,\ 1000,\ 0,\ 180));}
+\DoxyCodeLine{00354\ \ \ servo2.write(map(500,\ 0,\ 1000,\ 0,\ 180));}
+\DoxyCodeLine{00355\ \ \ analogWrite(escPin1,\ map(1000,\ 1000,\ 2000,\ 0,\ 255));}
+\DoxyCodeLine{00356\ \ \ analogWrite(escPin2,\ map(1000,\ 1000,\ 2000,\ 0,\ 255));}
+\DoxyCodeLine{00357\ \}}
+\DoxyCodeLine{00358\ }
+\DoxyCodeLine{00359\ }
+\DoxyCodeLine{00360\ }
+\DoxyCodeLine{00361\ \textcolor{keywordtype}{void}\ resetState\ ()\ \{}
+\DoxyCodeLine{00362\ }
+\DoxyCodeLine{00363\ \ \ \ \textcolor{comment}{//\ In\ the\ reset\ state,\ motors\ are\ on\ stand-\/by,\ and\ no\ movement\ is\ occurring.}}
+\DoxyCodeLine{00364\ \ \ Serial.println(\textcolor{stringliteral}{"{}System\ is\ in\ RESET"{}});}
+\DoxyCodeLine{00365\ \ \ }
+\DoxyCodeLine{00366\ \ \ \textcolor{comment}{//\ Motor\ speed\ goes\ to\ zero,\ IMU\ is\ reset,\ microcontroller\ is\ reset}}
+\DoxyCodeLine{00367\ \ \ servo1.write(map(500,\ 0,\ 1000,\ 0,\ 180));}
+\DoxyCodeLine{00368\ \ \ servo1.write(map(500,\ 0,\ 1000,\ 0,\ 180));}
+\DoxyCodeLine{00369\ \ \ analogWrite(escPin1,\ map(1000,\ 1000,\ 2000,\ 0,\ 255));}
+\DoxyCodeLine{00370\ \ \ analogWrite(escPin2,\ map(1000,\ 1000,\ 2000,\ 0,\ 255));}
+\DoxyCodeLine{00371\ }
+\DoxyCodeLine{00372\ \ \ esp\_restart();}
+\DoxyCodeLine{00373\ \}}
+\DoxyCodeLine{00374\ }
+
+\end{DoxyCode}

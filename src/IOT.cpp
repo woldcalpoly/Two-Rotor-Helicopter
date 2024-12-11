@@ -31,7 +31,7 @@
 // parameters here; do not use any personally identifying or sensitive data
 #else
 const char* ssid1 = "BiCopter_Inflight_WiFi"; // ssid1, network name seen on LAN lists
-const char* password = "12345678"; // ESP32 WiFi password (min. 8 characters)  
+const char* password1 = "12345678"; // ESP32 WiFi password1 (min. 8 characters)  
  
 
 /* Put IP Address details */
@@ -66,11 +66,11 @@ void setup_wifi (void)
 #ifdef USE_LAN                           // If connecting to an existing LAN
     Serial << "Connecting to " << ssid1;
 
-    // The ssid1 and password should be kept secret in @c mycerts.h.
+    // The ssid1 and password1 should be kept secret in @c mycerts.h.
     // This file should contain the two lines,
     //   const char* ssid1 = "YourWiFiNetworkName";
-    //   const char* password = "YourWiFiPassword";
-    WiFi.begin (ssid1, password);
+    //   const char* password1 = "YourWiFipassword1";
+    WiFi.begin (ssid1, password1);
 
     while (WiFi.status() != WL_CONNECTED) 
     {
@@ -84,7 +84,7 @@ void setup_wifi (void)
     Serial << "Setting up WiFi access point...";
     WiFi.mode (WIFI_AP);
     WiFi.softAPConfig (local_ip, gateway, subnet);
-    WiFi.softAP (ssid1, password);
+    WiFi.softAP (ssid1, password1);
     Serial << "done." << endl;
 #endif
 }

@@ -1,0 +1,29 @@
+\doxysection{Altitude\+\_\+\+Control.\+h}
+\hypertarget{_altitude___control_8h_source}{}\label{_altitude___control_8h_source}\index{src/Altitude\_Control.h@{src/Altitude\_Control.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00002\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{float}\ altitudeControl(\textcolor{keywordtype}{float}\ accelZ,\ \textcolor{keywordtype}{float}\ \&altitudeMotor1Correction,\ \textcolor{keywordtype}{float}\ \&altitudeMotor2Correction)\ \{}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \ \ \ \ \textcolor{comment}{//\ Constants\ for\ tuning\ the\ response\ of\ the\ control}}
+\DoxyCodeLine{00005\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ Kp\ =\ 1.0;\ \ \textcolor{comment}{//\ Proportional\ gain,\ adjust\ as\ necessary}}
+\DoxyCodeLine{00006\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ maxPower\ =\ 100.0;\ \ \textcolor{comment}{//\ Maximum\ allowable\ power,\ adjust\ as\ necessary}}
+\DoxyCodeLine{00007\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ powerProportion\ =\ 1;\ \textcolor{comment}{//\ Ratio\ between\ correction\ number\ and\ actual\ motor\ power\ that\ needs\ to\ change}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ desired\ power\ adjustment\ based\ on\ the\ accelerometer\ input}}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keywordtype}{float}\ altitudeAdjustment\ =\ powerProportion\ *\ Kp\ *\ -\/accelZ;\ \ \textcolor{comment}{//\ Assuming\ 9.81\ m/s\string^2\ as\ the\ gravitational\ constant}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{comment}{//\ Adjust\ the\ motor\ power\ values}}
+\DoxyCodeLine{00013\ \ \ \ \ altitudeMotor1Correction\ =\ altitudeAdjustment;}
+\DoxyCodeLine{00014\ \ \ \ \ altitudeMotor2Correction\ =\ altitudeMotor1Correction;}
+\DoxyCodeLine{00015\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ \ if\ (motor1Power\ >\ 100)\ motor1Power\ =\ 100;}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ \ if\ (motor1Power\ <\ 0)\ motor1Power\ =\ 0;}}
+\DoxyCodeLine{00018\ \textcolor{comment}{}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ \ if\ (motor2Power\ >\ 100)\ motor2Power\ =\ 100;}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ \ if\ (motor2Power\ <\ 0)\ motor2Power\ =\ 0;}}
+\DoxyCodeLine{00021\ \textcolor{comment}{*/}\ }
+\DoxyCodeLine{00022\ \}}
+\DoxyCodeLine{00023\ \ }
+
+\end{DoxyCode}

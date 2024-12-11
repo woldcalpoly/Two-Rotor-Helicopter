@@ -1,0 +1,48 @@
+\doxysection{Roll\+\_\+\+Control.\+h}
+\hypertarget{_roll___control_8h_source}{}\label{_roll___control_8h_source}\index{src/Roll\_Control.h@{src/Roll\_Control.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00002\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{float}\ rollControl(\textcolor{keywordtype}{float}\ accelY,\ \textcolor{keywordtype}{float}\ gyroX,\ \textcolor{keywordtype}{float}\ \&rollMotor1Correction,\ \textcolor{keywordtype}{float}\ \&rollMotor2Correction,\ \textcolor{keywordtype}{float}\ \&rollServo1Correction,\ \textcolor{keywordtype}{float}\ \&rollServo2Correction)\ \{}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ kP\ =\ 1.5;}
+\DoxyCodeLine{00005\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ kD\ =\ 0.8;\ \textcolor{comment}{//\ Derivative\ gain}}
+\DoxyCodeLine{00006\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ powerMotorProportion\ =\ 1;\ \textcolor{comment}{//\ Ratio\ between\ correction\ number\ and\ actual\ motor\ power\ that\ needs\ to\ change}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ kP\ =\ 1.5;}
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ kD\ =\ 0.8;\ \textcolor{comment}{//\ Derivative\ gain}}
+\DoxyCodeLine{00010\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ powerServoProportion\ =\ 0.1;\ \textcolor{comment}{//\ Ratio\ between\ correction\ number\ and\ actual\ servo\ direction\ that\ needs\ to\ change}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ pitch\ error\ using\ accelerometer\ (proportional\ term)}}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keywordtype}{float}\ pitchError\ =\ accelY;}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ rate\ of\ change\ of\ pitch\ using\ gyroscope\ (derivative\ term)}}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{float}\ pitchRate\ =\ gyroX;}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{comment}{//\ Control\ output\ based\ on\ proportional-\/derivative\ (PD)\ control}}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{float}\ rollMotorCorrection\ =\ powerMotorProportion\ *\ (kP\ *\ pitchError)\ +\ (kD\ *\ pitchRate);}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{float}\ rollServoCorrection\ =\ powerServoProportion\ *\ (kP\ *\ pitchError)\ +\ (kD\ *\ pitchRate);}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{comment}{//\ Modify\ motor\ powers\ based\ on\ correction}}
+\DoxyCodeLine{00024\ \ \ \ \ rollMotor1Correction\ =\ rollMotorCorrection;}
+\DoxyCodeLine{00025\ \ \ \ \ rollMotor2Correction\ =\ rollMotor1Correction;}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ rollServo1Correction\ =\ rollServoCorrection;}
+\DoxyCodeLine{00028\ \ \ \ \ rollServo2Correction\ =\ rollServo1Correction;}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ //\ Clamp\ motor\ power\ to\ valid\ range\ (0\ to\ 100,\ for\ example)}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ if\ (motor1Power\ >\ 100)\ motor1Power\ =\ 100;}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ if\ (motor1Power\ <\ 0)\ motor1Power\ =\ 0;}}
+\DoxyCodeLine{00035\ \textcolor{comment}{}}
+\DoxyCodeLine{00036\ \textcolor{comment}{\ \ \ \ if\ (motor2Power\ >\ 100)\ motor2Power\ =\ 100;}}
+\DoxyCodeLine{00037\ \textcolor{comment}{\ \ \ \ if\ (motor2Power\ <\ 0)\ motor2Power\ =\ 0;}}
+\DoxyCodeLine{00038\ \textcolor{comment}{}}
+\DoxyCodeLine{00039\ \textcolor{comment}{\ \ \ \ return\ (rollPowerCorrection1,\ rollPowerCorrection2);}}
+\DoxyCodeLine{00040\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \}}
+
+\end{DoxyCode}

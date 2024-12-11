@@ -1,0 +1,28 @@
+\doxysection{Combiner\+\_\+\+Function.\+h}
+\hypertarget{_combiner___function_8h_source}{}\label{_combiner___function_8h_source}\index{src/Combiner\_Function.h@{src/Combiner\_Function.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00002\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ combinerFunction(\textcolor{keywordtype}{float}\ \&pitchMotor1Correction,\ \textcolor{keywordtype}{float}\ \&pitchMotor2Correction,}
+\DoxyCodeLine{00003\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \&yawMotor1Correction,\ \textcolor{keywordtype}{float}\ \&yawMotor2Correction,}
+\DoxyCodeLine{00004\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \&yawServo1Correction,\ \textcolor{keywordtype}{float}\ \&yawServo2Correction,\ }
+\DoxyCodeLine{00005\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \&rollMotor1Correction,\ \textcolor{keywordtype}{float}\ \&rollMotor2Correction,}
+\DoxyCodeLine{00006\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \&rollServo1Correction,\ \textcolor{keywordtype}{float}\ \ \&rollServo2Correction,}
+\DoxyCodeLine{00007\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \&altitudeMotor1Correction,\ \textcolor{keywordtype}{float}\ \&altitudeMotor2Correction,}
+\DoxyCodeLine{00008\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{long}\ \&currentPosition1,\ \textcolor{keywordtype}{long}\ \&currentPosition2,}
+\DoxyCodeLine{00009\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \&motor1Correction,\ \textcolor{keywordtype}{float}\ \&motor2Correction,\ }
+\DoxyCodeLine{00010\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ \&servo1Correction,\ \textcolor{keywordtype}{float}\ \&servo2Correction)\ \ \{}
+\DoxyCodeLine{00011\ \ \ \ \ }
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keywordtype}{float}\ pitchPriority\ =\ 1;}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keywordtype}{float}\ yawPriority\ =\ 0.5;}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keywordtype}{float}\ rollPriority\ =\ 0.4;}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keywordtype}{float}\ altitudePriority\ =\ 0.8;}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ motor1Correction\ =\ (pitchPriority\ *\ pitchMotor1Correction\ +\ yawPriority\ *\ yawMotor1Correction\ +\ rollPriority\ *\ \ rollMotor1Correction\ +\ altitudePriority\ *\ altitudeMotor1Correction)\ /\ 4;}
+\DoxyCodeLine{00018\ \ \ \ \ motor2Correction\ =\ (pitchPriority\ *\ pitchMotor2Correction\ +\ yawPriority\ *\ yawMotor2Correction\ +\ rollPriority\ *\ \ rollMotor2Correction\ +\ altitudePriority\ *\ altitudeMotor2Correction)\ /\ 4;}
+\DoxyCodeLine{00019\ \ \ \ \ servo1Correction\ =\ currentPosition1\ +\ (yawPriority\ *\ yawServo1Correction\ -\/\ rollPriority\ *\ rollServo1Correction)\ /\ 10;}
+\DoxyCodeLine{00020\ \ \ \ \ servo2Correction\ =\ currentPosition2\ +\ (yawPriority\ *\ yawServo2Correction\ +\ rollPriority\ *\ rollServo2Correction)\ /\ 10;}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \}\ }
+
+\end{DoxyCode}

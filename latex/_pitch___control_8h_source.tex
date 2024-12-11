@@ -1,0 +1,35 @@
+\doxysection{Pitch\+\_\+\+Control.\+h}
+\hypertarget{_pitch___control_8h_source}{}\label{_pitch___control_8h_source}\index{src/Pitch\_Control.h@{src/Pitch\_Control.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00002\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ pitchControl(\textcolor{keywordtype}{float}\ accelX,\ \textcolor{keywordtype}{float}\ gyroY,\ \textcolor{keywordtype}{float}\ \&pitchMotor1Correction,\ \textcolor{keywordtype}{float}\ \&pitchMotor2Correction)\ \{}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ kP\ =\ 1.5;}
+\DoxyCodeLine{00005\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ kD\ =\ 0.8;\ \textcolor{comment}{//\ Derivative\ gain}}
+\DoxyCodeLine{00006\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ powerProportion\ =\ 1;\ \textcolor{comment}{//\ Ratio\ between\ correction\ number\ and\ actual\ motor\ power\ that\ needs\ to\ change}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ pitch\ error\ using\ accelerometer\ (proportional\ term)}}
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{keywordtype}{float}\ pitchError\ =\ accelX;}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ rate\ of\ change\ of\ pitch\ using\ gyroscope\ (derivative\ term)}}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keywordtype}{float}\ pitchRate\ =\ gyroY;}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{comment}{//\ Control\ output\ based\ on\ proportional-\/derivative\ (PD)\ control}}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keywordtype}{float}\ pitchCorrection\ =\ \ powerProportion\ *\ (kP\ *\ pitchError)\ +\ (kD\ *\ pitchRate);}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{comment}{//\ Modify\ motor\ powers\ based\ on\ correction}}
+\DoxyCodeLine{00019\ \ \ \ \ pitchMotor1Correction\ =\ pitchCorrection;}
+\DoxyCodeLine{00020\ \ \ \ \ pitchMotor2Correction\ =\ -\/1\ *\ pitchCorrection;}
+\DoxyCodeLine{00021\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ //\ Clamp\ motor\ power\ to\ valid\ range\ (0\ to\ 100,\ for\ example)}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ if\ (motor1Power\ >\ 100)\ motor1Power\ =\ 100;}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ if\ (motor1Power\ <\ 0)\ motor1Power\ =\ 0;}}
+\DoxyCodeLine{00025\ \textcolor{comment}{}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ if\ (motor2Power\ >\ 100)\ motor2Power\ =\ 100;}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ if\ (motor2Power\ <\ 0)\ motor2Power\ =\ 0;}}
+\DoxyCodeLine{00028\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00029\ \}}
+
+\end{DoxyCode}

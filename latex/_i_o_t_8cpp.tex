@@ -1,0 +1,177 @@
+\doxysection{src/\+IOT.cpp File Reference}
+\hypertarget{_i_o_t_8cpp}{}\label{_i_o_t_8cpp}\index{src/IOT.cpp@{src/IOT.cpp}}
+{\ttfamily \#include $<$Arduino.\+h$>$}\newline
+{\ttfamily \#include "{}Print\+Stream.\+h"{}}\newline
+{\ttfamily \#include $<$Wi\+Fi.\+h$>$}\newline
+{\ttfamily \#include $<$Web\+Server.\+h$>$}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{_i_o_t_8cpp_aa2a5c774150998c42b693fd2fd4c1e0b}\label{_i_o_t_8cpp_aa2a5c774150998c42b693fd2fd4c1e0b} 
+\#define {\bfseries FAST\+\_\+\+PIN}~12
+\begin{DoxyCompactList}\small\item\em The GPIO pin cranking out a 500 Hz square wave. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{_i_o_t_8cpp_a4bb2f6790489d53e1530b1f3bfdb043f}\label{_i_o_t_8cpp_a4bb2f6790489d53e1530b1f3bfdb043f} 
+IPAddress {\bfseries local\+\_\+ip} (192, 168, 5, 1)
+\item 
+\Hypertarget{_i_o_t_8cpp_a7f5e4435988c442ffce0ac2f1a53d866}\label{_i_o_t_8cpp_a7f5e4435988c442ffce0ac2f1a53d866} 
+IPAddress {\bfseries gateway} (192, 168, 5, 1)
+\item 
+\Hypertarget{_i_o_t_8cpp_a89cf134ada28d8ce0192d9fcbc83614a}\label{_i_o_t_8cpp_a89cf134ada28d8ce0192d9fcbc83614a} 
+IPAddress {\bfseries subnet} (255, 255, 255, 0)
+\item 
+Web\+Server \mbox{\hyperlink{_i_o_t_8cpp_a48f3f185be3ea2d153c347a157b38d42}{server}} (80)
+\begin{DoxyCompactList}\small\item\em The web server object for this project. \end{DoxyCompactList}\item 
+\Hypertarget{_i_o_t_8cpp_a2db7e734a3678bd61b7b9556caf2d933}\label{_i_o_t_8cpp_a2db7e734a3678bd61b7b9556caf2d933} 
+void {\bfseries setup\+\_\+wifi} (void)
+\begin{DoxyCompactList}\small\item\em Get the Wi\+Fi running so we can serve some web pages. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_i_o_t_8cpp_a56d51c0dcf49cb5bc93d901581d3fed2}{HTML\+\_\+header}} (String \&a\+\_\+string, const char \texorpdfstring{$\ast$}{*}page\+\_\+title)
+\begin{DoxyCompactList}\small\item\em Put a web page header into an HTML string. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_i_o_t_8cpp_ab25b75a0fc1cc2eb45e7afa0f57b4a6a}{handle\+\_\+\+Document\+Root}} ()
+\begin{DoxyCompactList}\small\item\em Callback function that responds to HTTP requests without a subpage name. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_i_o_t_8cpp_ac0b9ea1d435271c3832076b57b803da7}{handle\+\_\+\+Not\+Found}} (void)
+\begin{DoxyCompactList}\small\item\em Respond to a request for an HTTP page that doesn\textquotesingle{}t exist. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_i_o_t_8cpp_a822e74b3c34df79815f90657c8d8327c}{handle\+\_\+reset}} (void)
+\begin{DoxyCompactList}\small\item\em Toggle blue LED when called by the web server. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_i_o_t_8cpp_a4d7cdb90f67a02f58081566ff392b2b5}{handle\+\_\+\+CSV}} (void)
+\begin{DoxyCompactList}\small\item\em Show some simulated data when asked by the web server. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_i_o_t_8cpp_a577f28c6d870b5b9f1c4510d8195094a}{task\+\_\+webserver}} (void \texorpdfstring{$\ast$}{*}p\+\_\+params)
+\begin{DoxyCompactList}\small\item\em Task which sets up and runs a web server. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_i_o_t_8cpp_aadc062d0bbe03134ceccfd154750c24d}{task\+\_\+fast}} (void \texorpdfstring{$\ast$}{*}p\+\_\+params)
+\begin{DoxyCompactList}\small\item\em Task which sends a high frequency signal to show it can run fast. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{_i_o_t_8cpp_ad86cd6bfebecf808846a1bc49d128d20}\label{_i_o_t_8cpp_ad86cd6bfebecf808846a1bc49d128d20} 
+const char \texorpdfstring{$\ast$}{*} {\bfseries ssid1} = "{}Bi\+Copter\+\_\+\+Inflight\+\_\+\+Wi\+Fi"{}
+\item 
+\Hypertarget{_i_o_t_8cpp_aa4a2ebcb494493f648ae1e6975672575}\label{_i_o_t_8cpp_aa4a2ebcb494493f648ae1e6975672575} 
+const char \texorpdfstring{$\ast$}{*} {\bfseries password} = "{}12345678"{}
+\item 
+\Hypertarget{_i_o_t_8cpp_a59cd9f4f39202cbaad65ca3e0c2a5a60}\label{_i_o_t_8cpp_a59cd9f4f39202cbaad65ca3e0c2a5a60} 
+const uint8\+\_\+t {\bfseries led\+Pin} = 2
+\begin{DoxyCompactList}\small\item\em The pin connected to an LED controlled through the Web interface. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This program runs a very simple web server, demonstrating how to serve a static web page and how to use a web link to get the microcontroller to do something simple.
+
+Based on an examples by A. Sinha at {\ttfamily \href{https://github.com/hippyaki/WebServers-on-ESP32-Codes}{\texttt{ https\+://github.\+com/hippyaki/\+Web\+Servers-\/on-\/\+ESP32-\/\+Codes}}} 
+
+\begin{DoxyAuthor}{Author}
+A. Sinha 
+
+JR Ridgely 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2022-\/Mar-\/28 Original stuff by Sinha 
+
+2022-\/Nov-\/04 Modified for ME507 use by Ridgely 
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+2022 by the authors, released under the MIT License. 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{_i_o_t_8cpp_a4d7cdb90f67a02f58081566ff392b2b5}\index{IOT.cpp@{IOT.cpp}!handle\_CSV@{handle\_CSV}}
+\index{handle\_CSV@{handle\_CSV}!IOT.cpp@{IOT.cpp}}
+\doxysubsubsection{\texorpdfstring{handle\_CSV()}{handle\_CSV()}}
+{\footnotesize\ttfamily \label{_i_o_t_8cpp_a4d7cdb90f67a02f58081566ff392b2b5} 
+void handle\+\_\+\+CSV (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Show some simulated data when asked by the web server. 
+
+The contrived data is sent in a relatively efficient Comma Separated Variable (CSV) format which is easily read by Matlab(tm) and Python and spreadsheets. \Hypertarget{_i_o_t_8cpp_ab25b75a0fc1cc2eb45e7afa0f57b4a6a}\index{IOT.cpp@{IOT.cpp}!handle\_DocumentRoot@{handle\_DocumentRoot}}
+\index{handle\_DocumentRoot@{handle\_DocumentRoot}!IOT.cpp@{IOT.cpp}}
+\doxysubsubsection{\texorpdfstring{handle\_DocumentRoot()}{handle\_DocumentRoot()}}
+{\footnotesize\ttfamily \label{_i_o_t_8cpp_ab25b75a0fc1cc2eb45e7afa0f57b4a6a} 
+void handle\+\_\+\+Document\+Root (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Callback function that responds to HTTP requests without a subpage name. 
+
+When another computer contacts this ESP32 through TCP/\+IP port 80 (the insecure Web port) with a request for the main web page, this callback function is run. It sends the main web page\textquotesingle{}s text to the requesting machine. \Hypertarget{_i_o_t_8cpp_ac0b9ea1d435271c3832076b57b803da7}\index{IOT.cpp@{IOT.cpp}!handle\_NotFound@{handle\_NotFound}}
+\index{handle\_NotFound@{handle\_NotFound}!IOT.cpp@{IOT.cpp}}
+\doxysubsubsection{\texorpdfstring{handle\_NotFound()}{handle\_NotFound()}}
+{\footnotesize\ttfamily \label{_i_o_t_8cpp_ac0b9ea1d435271c3832076b57b803da7} 
+void handle\+\_\+\+Not\+Found (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Respond to a request for an HTTP page that doesn\textquotesingle{}t exist. 
+
+This function produces the Error 404, Page Not Found error. \Hypertarget{_i_o_t_8cpp_a822e74b3c34df79815f90657c8d8327c}\index{IOT.cpp@{IOT.cpp}!handle\_reset@{handle\_reset}}
+\index{handle\_reset@{handle\_reset}!IOT.cpp@{IOT.cpp}}
+\doxysubsubsection{\texorpdfstring{handle\_reset()}{handle\_reset()}}
+{\footnotesize\ttfamily \label{_i_o_t_8cpp_a822e74b3c34df79815f90657c8d8327c} 
+void handle\+\_\+reset (\begin{DoxyParamCaption}\item[{void}]{}{}\end{DoxyParamCaption})}
+
+
+
+Toggle blue LED when called by the web server. 
+
+For testing purposes, this function turns the little blue LED on a 38-\/pin ESP32 board on and off. It is called when someone enters {\ttfamily \href{http://server.address/toggle}{\texttt{ http\+://server.\+address/toggle}}} as the web address request from a browser. \Hypertarget{_i_o_t_8cpp_a56d51c0dcf49cb5bc93d901581d3fed2}\index{IOT.cpp@{IOT.cpp}!HTML\_header@{HTML\_header}}
+\index{HTML\_header@{HTML\_header}!IOT.cpp@{IOT.cpp}}
+\doxysubsubsection{\texorpdfstring{HTML\_header()}{HTML\_header()}}
+{\footnotesize\ttfamily \label{_i_o_t_8cpp_a56d51c0dcf49cb5bc93d901581d3fed2} 
+void HTML\+\_\+header (\begin{DoxyParamCaption}\item[{String \&}]{a\+\_\+string}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{page\+\_\+title}{}\end{DoxyParamCaption})}
+
+
+
+Put a web page header into an HTML string. 
+
+This header may be modified if the developer wants some actual {\itshape style} for her or his web page. It is intended to be a common header (and stylle) for each of the pages served by this server. 
+\begin{DoxyParams}{Parameters}
+{\em a\+\_\+string} & A reference to a string to which the header is added; the string must have been created in each function that calls this one \\
+\hline
+{\em page\+\_\+title} & The title of the page \\
+\hline
+\end{DoxyParams}
+\Hypertarget{_i_o_t_8cpp_a48f3f185be3ea2d153c347a157b38d42}\index{IOT.cpp@{IOT.cpp}!server@{server}}
+\index{server@{server}!IOT.cpp@{IOT.cpp}}
+\doxysubsubsection{\texorpdfstring{server()}{server()}}
+{\footnotesize\ttfamily \label{_i_o_t_8cpp_a48f3f185be3ea2d153c347a157b38d42} 
+Web\+Server server (\begin{DoxyParamCaption}\item[{80}]{}{}\end{DoxyParamCaption})}
+
+
+
+The web server object for this project. 
+
+This server is responsible for responding to HTTP requests from other computers, replying with useful information.
+
+It\textquotesingle{}s kind of clumsy to have this object as a global, but that\textquotesingle{}s the way Arduino keeps things simple to program, without the user having to write custom classes or other intermediate-\/level structures. \Hypertarget{_i_o_t_8cpp_aadc062d0bbe03134ceccfd154750c24d}\index{IOT.cpp@{IOT.cpp}!task\_fast@{task\_fast}}
+\index{task\_fast@{task\_fast}!IOT.cpp@{IOT.cpp}}
+\doxysubsubsection{\texorpdfstring{task\_fast()}{task\_fast()}}
+{\footnotesize\ttfamily \label{_i_o_t_8cpp_aadc062d0bbe03134ceccfd154750c24d} 
+void task\+\_\+fast (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{p\+\_\+params}{}\end{DoxyParamCaption})}
+
+
+
+Task which sends a high frequency signal to show it can run fast. 
+
+This task sends a square wave signal with a frequency of 500 Hz and a duty cyle of 50\%. Its purpose in the Wi\+Fi demonstration is to verify that a fast task can run at higher priority than the Wi\+Fi task and keep relatively accurate timing. 
+\begin{DoxyParams}{Parameters}
+{\em p\+\_\+params} & An unused pointer to (no) parameters passed to this task \\
+\hline
+\end{DoxyParams}
+\Hypertarget{_i_o_t_8cpp_a577f28c6d870b5b9f1c4510d8195094a}\index{IOT.cpp@{IOT.cpp}!task\_webserver@{task\_webserver}}
+\index{task\_webserver@{task\_webserver}!IOT.cpp@{IOT.cpp}}
+\doxysubsubsection{\texorpdfstring{task\_webserver()}{task\_webserver()}}
+{\footnotesize\ttfamily \label{_i_o_t_8cpp_a577f28c6d870b5b9f1c4510d8195094a} 
+void task\+\_\+webserver (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{p\+\_\+params}{}\end{DoxyParamCaption})}
+
+
+
+Task which sets up and runs a web server. 
+
+After setup, function {\ttfamily handle\+Client()} must be run periodically to check for page requests from web clients. One could run this task as the lowest priority task with a short or no delay, as there generally isn\textquotesingle{}t much rush in replying to web queries. 
+\begin{DoxyParams}{Parameters}
+{\em p\+\_\+params} & Pointer to unused parameters \\
+\hline
+\end{DoxyParams}

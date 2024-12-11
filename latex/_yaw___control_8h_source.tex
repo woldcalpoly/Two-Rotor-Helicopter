@@ -1,0 +1,42 @@
+\doxysection{Yaw\+\_\+\+Control.\+h}
+\hypertarget{_yaw___control_8h_source}{}\label{_yaw___control_8h_source}\index{src/Yaw\_Control.h@{src/Yaw\_Control.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00002\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{float}\ yawControl(\textcolor{keywordtype}{float}\ gyroZ,\ \textcolor{keywordtype}{float}\ \&yawMotor1Correction,\ \textcolor{keywordtype}{float}\ \&yawMotor2Correction,\ \textcolor{keywordtype}{float}\ \&yawServo1Correction,\ \textcolor{keywordtype}{float}\ \&yawServo2Correction)\ \{}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ yawSensitivity\ =\ 0.1f;\ \textcolor{comment}{//\ Adjust\ as\ needed}}
+\DoxyCodeLine{00005\ \ \ \ \ }
+\DoxyCodeLine{00006\ \ \ \ \ \textcolor{comment}{//\ Basic\ proportional\ control\ logic\ for\ yaw}}
+\DoxyCodeLine{00007\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ Kp\ =\ 0.5;\ \ \textcolor{comment}{//\ Proportional\ gain,\ adjust\ as\ necessary}}
+\DoxyCodeLine{00008\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ maxPower\ =\ 100.0;\ \ \textcolor{comment}{//\ Maximum\ allowable\ power,\ adjust\ as\ necessary}}
+\DoxyCodeLine{00009\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{float}\ powerProportion\ =\ 1;\ \textcolor{comment}{//\ Ratio\ between\ correction\ number\ and\ actual\ motor\ power\ that\ needs\ to\ change}}
+\DoxyCodeLine{00010\ \ \ \ \ }
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{comment}{//\ Calculate\ the\ control\ adjustment\ based\ on\ the\ gyro\ input}}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keywordtype}{float}\ yawAdjustment\ =\ powerProportion\ *\ Kp\ *\ gyroZ;}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{comment}{//\ Modify\ the\ main\ motor\ powers\ and\ servo\ motor\ powers}}
+\DoxyCodeLine{00015\ \ \ \ \ yawMotor1Correction\ =\ yawAdjustment;}
+\DoxyCodeLine{00016\ \ \ \ \ yawMotor2Correction\ =\ -\/1\ *\ yawAdjustment;}
+\DoxyCodeLine{00017\ \ \ \ \ yawServo1Correction\ =\ yawAdjustment\ /\ 10;\ \ \textcolor{comment}{//\ Reduce\ the\ effect\ for\ servo\ motors\ if\ needed}}
+\DoxyCodeLine{00018\ \ \ \ \ yawServo2Correction\ =\ -\/1\ *\ yawAdjustment\ /\ 10;}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ \ //\ Clamp\ the\ power\ values\ to\ the\ range\ [0,\ maxPower]}}
+\DoxyCodeLine{00022\ \textcolor{comment}{\ \ \ \ if\ (yawPowerCorrection1\ >\ 100)\ yawPowerCorrection1\ =\ 100;}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ if\ (yawPowerCorrection1\ <\ 0)\ yawPowerCorrection1\ =\ 0;}}
+\DoxyCodeLine{00024\ \textcolor{comment}{}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ if\ (yawPowerCorrection2\ >\ 100)\ yawPowerCorrection2\ =\ 100;}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ if\ (yawPowerCorrection2\ <\ 0)\ yawPowerCorrection2\ =\ 0;}}
+\DoxyCodeLine{00027\ \textcolor{comment}{}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ if\ (yawServoCorrection1\ >\ 100)\ yawServoCorrection1\ =\ 100;}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ if\ (yawServoCorrection1\ <\ 0)\ yawServoCorrection1\ =\ 0;}}
+\DoxyCodeLine{00030\ \textcolor{comment}{}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ if\ (yawServoCorrection2\ >\ 100)\ yawServoCorrection2\ =\ 100;}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ if\ (yawServoCorrection2\ <\ 0)\ yawServoCorrection2\ =\ 0;\(\backslash\)}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ }}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ return(yawPowerCorrection1,\ yawPowerCorrection2,\ yawServoCorrection1,\ yawServoCorrection2);}}
+\DoxyCodeLine{00035\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00036\ \}}
+
+\end{DoxyCode}
