@@ -30,8 +30,9 @@
 // If the ESP32 creates its own access point, put the credentials and network
 // parameters here; do not use any personally identifying or sensitive data
 #else
-const char* ssid = "Firebeetle";   // SSID, network name seen on LAN lists
-const char* password = "capybara";   // ESP32 WiFi password (min. 8 characters)
+const char* ssid1 = "BiCopter_Inflight_WiFi"; // ssid1, network name seen on LAN lists
+const char* password = "12345678"; // ESP32 WiFi password (min. 8 characters)  
+ 
 
 /* Put IP Address details */
 IPAddress local_ip (192, 168, 5, 1); // Address of ESP32 on its own network
@@ -63,13 +64,13 @@ WebServer server (80);
 void setup_wifi (void)
 {
 #ifdef USE_LAN                           // If connecting to an existing LAN
-    Serial << "Connecting to " << ssid;
+    Serial << "Connecting to " << ssid1;
 
-    // The SSID and password should be kept secret in @c mycerts.h.
+    // The ssid1 and password should be kept secret in @c mycerts.h.
     // This file should contain the two lines,
-    //   const char* ssid = "YourWiFiNetworkName";
+    //   const char* ssid1 = "YourWiFiNetworkName";
     //   const char* password = "YourWiFiPassword";
-    WiFi.begin (ssid, password);
+    WiFi.begin (ssid1, password);
 
     while (WiFi.status() != WL_CONNECTED) 
     {
@@ -83,7 +84,7 @@ void setup_wifi (void)
     Serial << "Setting up WiFi access point...";
     WiFi.mode (WIFI_AP);
     WiFi.softAPConfig (local_ip, gateway, subnet);
-    WiFi.softAP (ssid, password);
+    WiFi.softAP (ssid1, password);
     Serial << "done." << endl;
 #endif
 }
