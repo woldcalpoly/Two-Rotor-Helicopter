@@ -10,10 +10,6 @@
 #include <PubSubClient.h>
 
 
-// Wi-Fi credentials
-const char* ssid = "BiCopter_Inflight_WiFi";
-const char* password = "12345678";
-
 Adafruit_LSM6DSOX lsm6dsox;
 
 // Define pins for the system 
@@ -445,7 +441,7 @@ void loop() {
       resetState();
       break;
   }
-
+  
   delay(10);
 
 }
